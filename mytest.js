@@ -1,8 +1,9 @@
+// @ts-check
 const { Builder, By, Key, until } = require("selenium-webdriver");
 const path = require("path");
 const chrome = require("selenium-webdriver/chrome");
 const googleDriverConfig = require("./src/configs/googleDriver.config.json");
-const { Helper } = require("./src/configs/features/utils/Helper");
+const { Helper } = require("./src/utils/Helper");
 
 function getDriverPath(type) {
   const platform = process.platform;
@@ -113,4 +114,113 @@ async function example() {
   }
 }
 
-example();
+/**
+ *
+ * @param {any} obj
+ * @returns {Array<string>}
+ */
+function props(obj) {
+  var p = [];
+  for (; obj != null; obj = Object.getPrototypeOf(obj)) {
+    var op = Object.getOwnPropertyNames(obj);
+    for (var i = 0; i < op.length; i++)
+      if (p.indexOf(op[i]) == -1) p.push(op[i]);
+  }
+  return p;
+}
+
+// example();
+
+class InterfaceAnimal {
+  /**
+   * public param
+   * @date 3/24/2023 - 1:41:09 PM
+   *
+   * @type {number}
+   */
+  publicParam = 2;
+
+  /**
+   * public param
+   * @date 3/24/2023 - 1:41:06 PM
+   *
+   * @type {number}
+   */
+  #privateParam = 1;
+
+  speak() {
+    throw new Error("speak method must be implemented in derived classes");
+  }
+  showHidden() {
+    const proto = Object.getPrototypeOf(this);
+    console.log(props(this), this.publicParam, this.#privateParam);
+  }
+}
+
+class A extends InterfaceAnimal {
+  constructor() {
+    super();
+    this.publicParam = 11;
+  }
+
+  speak() {
+    console.log(this.publicParam);
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.publicParam = 22;
+  }
+}
+
+let a = new A();
+let b = new B();
+
+a.speak();
+a.showHidden();
+b.speak();
+b.showHidden();
+
+const boxPrototype = {
+  getValue() {
+    return this.value;
+  },
+};
+
+const boxes = [
+  { value: 1, __proto__: boxPrototype },
+  { value: 2, __proto__: boxPrototype },
+  { value: 3, __proto__: boxPrototype },
+];
+for (let i = 0; i < boxes.length; i++) {
+  console.log(boxes[i].getValue());
+}
+
+class C {
+  /**
+   * @type {InterfaceAnimal}
+   */
+  test;
+
+  /**
+   *
+   * @param {InterfaceAnimal} i
+   */
+  constructor(i) {
+    this.test = i;
+  }
+
+  show() {
+    this.test.speak();
+  }
+
+  static swww() {
+    console.warn("Q");
+  }
+}
+
+let c = new C(a);
+c.show();
+C.swww();
