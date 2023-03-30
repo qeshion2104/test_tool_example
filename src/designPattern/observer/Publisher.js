@@ -1,4 +1,5 @@
 const Observer = require("./Observer");
+
 class Publisher {
   /**
    * @type { Observer[] }
@@ -9,6 +10,14 @@ class Publisher {
    * @type {any}
    */
   data;
+
+  /**
+   * Description placeholder
+   * @date 3/24/2023 - 3:41:52 PM
+   *
+   * @type {*}
+   */
+  compareMethodType;
 
   constructor() {
     this.observers = [];
